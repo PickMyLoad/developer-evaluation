@@ -1,0 +1,10 @@
+version: '3.2'
+services:
+  app:
+    image: node:8.8.1
+    command: ['yarn', 'start']
+    working_dir: /working_dir
+    volumes:
+      - ./:/working_dir/
+    ports:
+      - "5858:5858"

@@ -1,0 +1,41 @@
+{
+  "name": "pml-developer-evaluation",
+  "version": "1.0.0",
+  "description": "Library with sample problems to evaluate developer proficiency",
+  "author": "Dan Imbrogno <dan@pickmyload.com>",
+  "license": "UNLICENSED",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "yarn run lint && yarn run compile && yarn run test",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "test": "yarn run unit",
+    "unit": "mocha --inspect=0.0.0.0:5858 dist/**/*.spec.js",
+    "compile": "tsc -p ./",
+    "develop": "yarn run compile -w",
+    "start": "node ./dist/index.js",
+    "debug": "node --inspect=0.0.0.0:5858 ./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PickMyLoad/developer-evaluation"
+  },
+  "dependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/chai-as-promised": "^7.1.0",
+    "@types/chai-string": "^1.1.31",
+    "@types/lodash": "^4.14.88",
+    "@types/mocha": "^2.2.43",
+    "@types/node": "^8.0.45",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-string": "^1.4.0",
+    "lodash": "^4.17.4",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.12.1",
+    "testdouble": "^3.2.6",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1"
+  },
+  "devDependencies": {}
+}

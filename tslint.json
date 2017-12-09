@@ -1,0 +1,37 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+      "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+      "quotemark":false,
+      "trailing-comma": false,
+      "eofline": false,
+      "ordered-imports": false,
+      "no-namespace": false,
+      "interface-name": true,
+      "typedef-whitespace":  [
+          true,
+          {
+            "call-signature": "nospace",
+            "index-signature": "nospace",
+            "parameter": "nospace",
+            "property-declaration": "nospace",
+            "variable-declaration": "nospace"
+          },
+          {
+            "call-signature": "onespace",
+            "index-signature": "onespace",
+            "parameter": "onespace",
+            "property-declaration": "onespace",
+            "variable-declaration": "onespace"
+          }
+        ],
+        "member-access":[true, "no-public"],
+        "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"],
+        "object-literal-sort-keys": false,
+        "no-empty-interface": false
+  },
+  "rulesDirectory": []
+}
