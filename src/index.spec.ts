@@ -419,7 +419,7 @@ describe('Developer Evaluation', () => {
 
   describe('parseSegmentsToObject', () => {
 
-    it(`should take data in the Segments format, apply the rules from the
+    it(`should take data in the segments format, apply the rules from the
     configuration object and output the data in the destination format`, () => {
 
       const config: ISegmentConfig[] = [
@@ -452,7 +452,7 @@ describe('Developer Evaluation', () => {
         }
       ];
 
-      const Segments = [
+      const segments = [
         ['shipmentDescription', '2014-01-01'],
         ['shipmentItem', 'Apples'],
         ['itemDescription', 'Apples are delicious red fruit.'],
@@ -519,7 +519,7 @@ describe('Developer Evaluation', () => {
         cost: 49.99
       };
 
-      const result = new ShipmentParser().parseSegmentsToObject(config, Segments);
+      const result = new ShipmentParser().parseSegmentsToObject(config, segments);
 
       expect(result).to.eql(destination);
 
