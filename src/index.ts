@@ -51,22 +51,4 @@ export class ShipmentParser {
 
   }
 
-  parseSegmentBundlesToArray(segmentConfigs: ISegmentConfig[], segmentBundles: string[][][]) {
-
-  }
-
-  getLoopSegmentParseStep(
-    loopId: string, loopSegmentConfigs: ISegmentConfig[], loopBundledSegments: string[][][]
-  ): IParserStep {
-
-  }
-
-  getSimpleSegmentParseStep(segmentConfig: ISegmentConfig, segment: string[]): IParserStep {
-
-  }
-
-  parseSegmentsToObject<U = any>(segmentConfigs: ISegmentConfig[], segments: string[][]) {
-
-  }
-
 }
