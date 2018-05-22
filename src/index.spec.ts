@@ -102,14 +102,8 @@ describe('Developer Evaluation', () => {
 
   describe('getFirstSegmentWithSegmentId', () => {
 
-    it(`should take a segmentId and an array of segments and return the first segment that matches,
-    or undefined if the first segment does not match`, () => {
-
-      const validSegments = [
-        ['a', '1'],
-        ['a', '2'],
-        ['b', '1'],
-      ];
+    it(`should take a segmentId and an array of segments and return the first segment if it matches the segmentId,
+    or undefined if the first segment does not match the segmentId`, () => {
 
       const invalidSegments = [
         ['b', '1'],
@@ -117,6 +111,7 @@ describe('Developer Evaluation', () => {
         ['a', '2'],
       ];
 
+      expect(new ShipmentParser().getFirstSegmentWithSegmentId('b', invalidSegments)).to.eql(['b', '1']);
       expect(new ShipmentParser().getFirstSegmentWithSegmentId('a', invalidSegments)).to.eql(undefined);
 
     });

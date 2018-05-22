@@ -15,7 +15,7 @@ Please don't submit your answers via a pull request. That's not how this works :
 Feel free to ask questions if you require clarifications.
 
 ## Overview
-The ShipmentParser class transforms data from an Array structure to a JSON  structured according to a set of rules defined in a "SegmentConfig" collection.
+The ShipmentParser class transforms data from an Array structure to a JSON  structure according to a set of rules defined in a "SegmentConfig" collection.
 
 Segments are provided as an array of string arrays. Each item in the array is a "Segment" and the first element in the "Segment" is the "Segment ID".
 
