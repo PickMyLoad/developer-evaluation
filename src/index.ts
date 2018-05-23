@@ -1,54 +1,25 @@
-import { takeWhile, drop, filter, reduce, clone, cloneDeep } from 'lodash';
-import { ISegmentConfig, IParserStep } from './interface';
+import { IFamilyTree, IColourTally, Colour, IGrocery, ICandy, IDistributedCandy } from './interface';
 
-export class ShipmentParser {
+export const oddNumberAccumulator = (start: number, end: number) => {
 
-  static shipmentItemParser = (segmentId: string, name: string) => {
+  return 0;
 
-  }
+};
 
-  static itemDescriptionParser = (segmentId: string, description: string) => {
+export const favoriteColorTallier = (familyTree: IFamilyTree, tally?: IColourTally) => {
 
-  }
+  return {} as IColourTally;
 
-  static itemDimensionsParser = (segmentId: string, weight: string, dims: string) => {
+};
 
-  }
+export const groceryBagger = async (promises: Array<Promise<IGrocery>>) => {
 
-  static shipmentDescriptionParser = (name: string, shipmentDate: string) => {
+  return [] as string[];
 
-  }
+};
 
-  static costParser = (name: string, cost: string) => {
+export const candyDistributor = (people: string[], candies: ICandy[]) => {
 
-  }
+  return [] as IDistributedCandy[];
 
-  getFirstSegmentsWithSegmentId(segmentId: string, segments: string[][]) {
-
-  }
-
-  getFirstSegmentWithSegmentId(segmentId: string, segments: string[][]) {
-
-  }
-
-  getFirstSegmentsWithSegmentIds(segmentIds: string[], segments: string[][]) {
-
-  }
-
-  getFirstSegmentConfigsWithSegmentIds(segmentIds: string[], segmentConfigs: ISegmentConfig[]) {
-
-  }
-
-  getBundledSegmentsInLoop(segmentIds: string[], segments: string[][]) {
-
-  }
-
-  getNumberOfSegmentsInSegmentBundle(segmentBundles: string[][][]) {
-
-  }
-
-  removeLoopPropertiesFromFirstSegmentConfig(segmentConfigs: ISegmentConfig[]) {
-
-  }
-
-}
+};

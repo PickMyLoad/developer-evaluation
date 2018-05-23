@@ -1,14 +1,35 @@
-export interface ISegmentConfig {
-  segmentId: string;
-  isLoop: boolean;
-  loopId?: string;
-  loopSegmentIds?: string[];
-  parser?: (...any) => {};
+export enum Colour {
+  RED = 'RED',
+  GREEN = 'GREEN',
+  BLUE = 'BLUE',
+  ORANGE = 'ORANGE',
+  PURPLE = 'PURPLE',
+  PINK = 'PINK'
 }
 
-export interface IParserStep {
-    key: string;
-    value: {};
-    numSegmentsToDrop: number;
-    numSegmentConfigsToDrop: number;
+export interface IFamilyTree {
+  name: string;
+  gender: 'male' | 'female';
+  favoriteColour: string;
+  children?: IFamilyTree[];
+}
+
+export interface IColourTally {
+  [key: string]: number;
+}
+
+export interface IGrocery {
+  item: string;
+  density: number;
+}
+
+export interface ICandy {
+  name: string;
+  quantity: number;
+  type: 'salty' | 'sweet';
+}
+
+export interface IDistributedCandy {
+  name: string;
+  candies: string[];
 }

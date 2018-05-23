@@ -1,315 +1,170 @@
-import { ISegmentConfig } from './interface';
-import { cloneDeep } from 'lodash';
+import { IFamilyTree, Colour, IGrocery, ICandy } from './interface';
+import { find } from 'lodash';
 import { expect } from 'chai';
-import * as testdouble from 'testdouble';
-import { ShipmentParser } from './index';
+import { oddNumberAccumulator, favoriteColorTallier, groceryBagger, candyDistributor } from './index';
 
 describe('Developer Evaluation', () => {
 
-  afterEach(() => { testdouble.reset(); });
+  describe('Odd Number Accumulator', () => {
 
-  describe('shipmentItemParser', () => {
-
-    it('should take a segmentId and name and return a valid object', () => {
-
-      expect(ShipmentParser.shipmentItemParser('shipmentItem', 'Apple')).to.eql(
-        { name: 'Apple' }
-      );
-
-    });
-
-  });
-
-  describe('itemDescriptionParser', () => {
-
-    it('should take a segmentId and description and return a valid string', () => {
+    it('should add all the odd numbers between the start and end', () => {
 
       expect(
-        ShipmentParser.itemDescriptionParser('itemDescription', 'Juicy Red Delicious Apple')
-      ).to.eql('Juicy Red Delicious Apple');
+        oddNumberAccumulator(1, 5)
+      ).to.eql(9);
+
+      expect(
+        oddNumberAccumulator(0, 10)
+      ).to.eql(25);
 
     });
 
   });
 
-  describe('itemDimensionsParser', () => {
+  describe('Favorite Colour Tallier', () => {
 
-    it(`should take a segmentId, weight string and
-    dimensions string in (1x1x1) format and return a valid object`, () => {
+    it('should tally the favorite colours of all the females in the family tree', () => {
 
-      expect(ShipmentParser.itemDimensionsParser('itemDimensions', '44', '5x6x7')).to.eql(
-        {
-          weight: 44,
-          dimensions: {
-            height: 5,
-            width: 6,
-            length: 7
+      const familyTree: IFamilyTree = {
+        name: 'Sharon',
+        gender: 'female',
+        favoriteColour: Colour.ORANGE,
+        children: [
+          {
+            name: 'Peter',
+            gender: 'male',
+            favoriteColour: Colour.BLUE,
+            children: [
+              {
+                name: 'Amy',
+                gender: 'female',
+                favoriteColour: Colour.PURPLE,
+              },
+              {
+                name: 'Levi',
+                gender: 'male',
+                favoriteColour: Colour.ORANGE,
+              }
+            ]
+          },
+          {
+            name: 'Paul',
+            gender: 'male',
+            favoriteColour: Colour.ORANGE,
+            children: [
+              {
+                name: 'Susan',
+                gender: 'female',
+                favoriteColour: Colour.GREEN
+              },
+              {
+                name: 'Sarah',
+                gender: 'female',
+                favoriteColour: Colour.PURPLE,
+                children: [
+                  {
+                    name: 'Leanne',
+                    gender: 'female',
+                    favoriteColour: Colour.GREEN
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            name: 'Mary',
+            gender: 'female',
+            favoriteColour: Colour.BLUE,
+            children: [
+              {
+                name: 'Oliver',
+                gender: 'male',
+                favoriteColour: Colour.BLUE
+              },
+              {
+                name: 'Odessa',
+                gender: 'female',
+                favoriteColour: Colour.ORANGE
+              }
+            ]
           }
-        }
-      );
+        ],
+
+      };
+
+      const tally = favoriteColorTallier(familyTree, undefined);
+
+      expect(tally.ORANGE).to.eql(2);
+      expect(tally.BLUE).to.eql(1);
+      expect(tally.PURPLE).to.eql(2);
+      expect(tally.GREEN).to.eql(2);
+      expect(tally.PINK).to.eql(0);
 
     });
 
   });
 
-  describe('shipmentDescriptionParser', () => {
+  describe('Grocery Bagger', () => {
 
-    it('should take a segmentId and a date string and return a valid date object', () => {
+    it(`should return the grocery items in the order they should
+      be placed in a grocery bag`, async () => {
 
-      expect(ShipmentParser.shipmentDescriptionParser('shipmentDescription', '2016-01-01')).to.eql(
-        { date: new Date('2016-01-01')}
-      );
-
-    });
-
-  });
-
-  describe('costParser', () => {
-
-    it('should take a segmentId and a string float and return a float', () => {
-
-      expect(ShipmentParser.costParser('cost', '14.99')).to.eql(14.99);
-
-    });
-
-  });
-
-  describe('getFirstSegmentsWithSegmentId', () => {
-
-    it(`should take a segmentId and an array of segments and return the
-    subset of the segments from the start, until it finds a segment whose
-    segmentId does not match the given segmentId`, () => {
-
-      const segments = [
-        ['a', '1'],
-        ['a', '2'],
-        ['a', '3'],
-        ['a', '4'],
-        ['b', '5'],
-        ['a', '6']
+      const promises: Array<Promise<IGrocery>> = [
+        new Promise((resolve) => setTimeout(() => resolve({ item: 'bread', density: 80 }), 4)),
+        new Promise((resolve) => setTimeout(() => resolve({ item: 'eggs', density: 30 }), 1)),
+        new Promise((resolve) => setTimeout(() => resolve({ item: 'milk', density: 200}), 2)),
+        new Promise((resolve) => setTimeout(() => resolve({ item: 'coconut', density: 120}), 3)),
       ];
 
-      expect(new ShipmentParser().getFirstSegmentsWithSegmentId('a', segments)).to.eql([
-        ['a', '1'],
-        ['a', '2'],
-        ['a', '3'],
-        ['a', '4']
+      const result = await groceryBagger(promises);
+
+      expect(result).to.eql([
+        'milk',
+        'coconut',
+        'bread',
+        'eggs'
       ]);
 
     });
 
   });
 
-  describe('getFirstSegmentWithSegmentId', () => {
+  describe('Candy Distributor', () => {
 
-    it(`should take a segmentId and an array of segments and return the first segment if it matches the segmentId,
-    or undefined if the first segment does not match the segmentId`, () => {
+    it(`should take a bowl of candy and portion it all out so that each person
+      gets the same amount of candy and each person gets an equal number of salty and sweet items.
+      Some candy may be left over.`, () => {
 
-      const invalidSegments = [
-        ['b', '1'],
-        ['a', '1'],
-        ['a', '2'],
+      const people = ['Dave', 'Sharon', 'Annie', 'Eric'];
+
+      const candies: ICandy[] = [
+        { name: 'Chips', quantity: 4, type: 'salty' },
+        { name: 'Pretzels', quantity: 8, type: 'salty' },
+        { name: 'Chocolate Bar', quantity: 12, type: 'sweet' },
+        { name: 'Lollipop', quantity: 18, type: 'sweet' },
       ];
 
-      expect(new ShipmentParser().getFirstSegmentWithSegmentId('b', invalidSegments)).to.eql(['b', '1']);
-      expect(new ShipmentParser().getFirstSegmentWithSegmentId('a', invalidSegments)).to.eql(undefined);
+      const results = candyDistributor(people, candies);
 
-    });
+      const dave = find(results, (result) => result.name === 'Dave');
+      const sharon = find(results, (result) => result.name === 'Sharon');
+      const annie = find(results, (result) => result.name === 'Annie');
+      const eric = find(results, (result) => result.name === 'Eric');
 
-  });
+      expect(dave.candies.length)
+        .to.eql(sharon.candies.length).and
+        .to.eql(annie.candies.length).and
+        .to.eql(eric.candies.length);
 
-  describe('getFirstSegmentsWithSegmentIds', () => {
-
-    it(`should take an array of segmentIds and an array of segments and return the first segments that match
-    any of the provided segmentIds`, () => {
-
-      const segments = [
-        ['a', '1'],
-        ['a', '2'],
-        ['b', '1'],
-        ['c', '1'],
-        ['d', '2']
-      ];
-
-      expect(new ShipmentParser().getFirstSegmentsWithSegmentIds(['a', 'b'], segments)).to.eql(
-        [
-          ['a', '1'],
-          ['a', '2'],
-          ['b', '1'],
-        ]
+      expect(
+        dave.candies.filter(
+          (candy) => candy === 'Chips' || candy === 'Pretzels'
+        ).length
+      ).to.eql(
+        dave.candies.filter(
+          (candy) => candy === 'Chocolate Bar' || candy === 'Lollipop'
+        ).length
       );
-
-    });
-
-  });
-
-  describe('getFirstSegmentConfigsWithSegmentIds', () => {
-
-    it(`should take an array of segmentIds and an array of segment configs and return the first segment
-    configs that match any of the provided segmentIds`, () => {
-
-      const segmentConfigs = [
-        {
-          segmentId: 'a',
-          isLoop: false,
-          parser: ShipmentParser.shipmentDescriptionParser
-        },
-        {
-          segmentId: 'b',
-          isLoop: true,
-          parser: ShipmentParser.shipmentItemParser
-        },
-        {
-          segmentId: 'c',
-          isLoop: false,
-          parser: ShipmentParser.itemDescriptionParser
-        },
-        {
-          segmentId: 'd',
-          isLoop: false,
-          parser: ShipmentParser.itemDimensionsParser
-        },
-      ];
-
-      expect(new ShipmentParser().getFirstSegmentConfigsWithSegmentIds(['a', 'b'], segmentConfigs)).to.eql(
-        [
-          {
-            segmentId: 'a',
-            isLoop: false,
-            parser: ShipmentParser.shipmentDescriptionParser
-          },
-          {
-            segmentId: 'b',
-            isLoop: true,
-            parser: ShipmentParser.shipmentItemParser
-          }
-        ]
-      );
-
-    });
-
-  });
-
-  describe('getBundledSegmentsInLoop', () => {
-
-    it(`should take and array of segmentIds and an array of segments,
-    and bundle the segments into repeating arrays,
-    starting a new bundle at each instance of the segmentId of the first segment`, () => {
-
-      const segments = [
-        ['a', '1'],
-        ['b', '1'],
-        ['c', '1'],
-        ['a', '2'],
-        ['b', '2'],
-        ['c', '2'],
-        ['a', '3'],
-        ['b', '3'],
-        ['c', '3'],
-      ];
-
-      expect(new ShipmentParser().getBundledSegmentsInLoop(['a', 'b', 'c'], segments)).to.eql(
-        [
-          [
-            ['a', '1'],
-            ['b', '1'],
-            ['c', '1'],
-          ],
-          [
-            ['a', '2'],
-            ['b', '2'],
-            ['c', '2'],
-          ],
-          [
-            ['a', '3'],
-            ['b', '3'],
-            ['c', '3'],
-          ]
-        ]
-      );
-
-    });
-
-  });
-
-  describe('getNumberOfSegmentsInSegmentBundle', () => {
-
-    it('should take a segment bundle and return the correct number of segments in that bundle', () => {
-
-      const segmentBundle = [
-        [
-          ['a'],
-          ['b'],
-          ['c']
-        ],
-        [
-          ['a'],
-          ['b'],
-          ['c']
-        ],
-        [
-          ['a'],
-          ['b'],
-          ['c']
-        ],
-      ];
-
-      expect(new ShipmentParser().getNumberOfSegmentsInSegmentBundle(segmentBundle)).to.eql(9);
-
-    });
-
-  });
-
-  describe('removeLoopPropertiesFromFirstSegmentConfig', () => {
-
-    it(`should take an array of segment configs, clone the object,
-    and alter the first segment config so it no longer describes a loop`, () => {
-
-      const segmentConfigs: ISegmentConfig[] = [
-        {
-          segmentId: 'shipmentItem',
-          isLoop: true,
-          loopId: 'shipmentItems',
-          loopSegmentIds: ['itemDescription', 'itemDimensions'],
-          parser: ShipmentParser.shipmentItemParser
-        },
-        {
-          segmentId: 'itemDescription',
-          isLoop: false,
-          parser: ShipmentParser.itemDescriptionParser
-        },
-        {
-          segmentId: 'itemDimensions',
-          isLoop: false,
-          parser: ShipmentParser.itemDimensionsParser
-        }
-      ];
-
-      expect(new ShipmentParser().removeLoopPropertiesFromFirstSegmentConfig(segmentConfigs)).to.eql(
-        [
-          {
-            segmentId: 'shipmentItem',
-            isLoop: false,
-            loopId: undefined,
-            loopSegmentIds: ['itemDescription', 'itemDimensions'],
-            parser: ShipmentParser.shipmentItemParser
-          },
-          {
-            segmentId: 'itemDescription',
-            isLoop: false,
-            parser: ShipmentParser.itemDescriptionParser
-          },
-          {
-            segmentId: 'itemDimensions',
-            isLoop: false,
-            parser: ShipmentParser.itemDimensionsParser
-          }
-        ]
-      );
-
-      // Make sure original copy of object is untouched
-      expect(segmentConfigs[0].loopId).to.not.eql(undefined);
-      expect(segmentConfigs[0].isLoop).to.not.eql(false);
 
     });
 
