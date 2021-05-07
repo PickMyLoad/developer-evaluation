@@ -23,7 +23,7 @@
     "@types/mocha": "^2.2.43",
     "@types/node": "^8.0.45",
     "chai": "^4.1.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "ts-mocha": "^1.2.0",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"
